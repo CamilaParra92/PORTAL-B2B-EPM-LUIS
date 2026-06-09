@@ -340,6 +340,22 @@ const LOGOS = {
   'Go Nails': LOGO_GO, 'Go Hair': LOGO_GO, 'Go Paw': LOGO_GO,
   'Bluesky': LOGO_BLUE, 'Artistic': LOGO_ART,
 };
+
+// Umbral mínimo de stock por marca para mostrar en catálogo
+const STOCK_MIN = {
+  'Nail Pro':    6,
+  'Avry Beauty': 6,
+  'Go Nails':    20,
+  'Go Hair':     20,
+  'Go Paw':      20,
+  'Bluesky':     20,
+  'Artistic':    20
+};
+function isUnavail(p) {
+  const min = STOCK_MIN[p.b] || 6;
+  return p.unavail || p.stock < min;
+}
+
 const BRAND_ORDER = ['Nail Pro','Go Nails','Go Hair','Go Paw','Bluesky','Artistic','Avry Beauty'];
 const BRAND_CFG = {
   'Nail Pro':    {color:'#e91e8c',bg:'#fce4f1',min:0,disc:[{at:360000,pct:5},{at:720000,pct:10}]},
@@ -510,7 +526,7 @@ function doFilter() {
     const matchBrand = curBrand==='all' || p.b===curBrand;
     const matchCat = curCat==='all' || p.c===curCat;
     const matchQ = !q || p.n.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q);
-    if (!q && (p.unavail || p.stock === 0)) return false;
+    if (!q && isUnavail(p)) return false;
     return matchBrand && matchCat && matchQ;
   });
   curPage=1; renderGrid(); renderPag();
@@ -535,9 +551,9 @@ function renderGrid() {
     } else {
       imgHtml = '<div class="pswatch" style="background:'+cfg.bg+'">'+swatchInner+'</div>';
     }
-    const cardStyle = p.unavail ? 'opacity:.55;filter:grayscale(.3)' : '';
+    const cardStyle = isUnavail(p) ? 'opacity:.55;filter:grayscale(.3)' : '';
     let actionsHtml;
-    if (p.unavail) {
+    if (isUnavail(p)) {
       actionsHtml = '<div class="unavail-tag">🚫 No disponible</div>';
     } else {
       actionsHtml = '<div class="qrow">'
