@@ -510,7 +510,7 @@ function doFilter() {
     const matchBrand = curBrand==='all' || p.b===curBrand;
     const matchCat = curCat==='all' || p.c===curCat;
     const matchQ = !q || p.n.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q);
-    if (!q && p.unavail) return false;
+    if (!q && (p.unavail || p.stock === 0)) return false;
     return matchBrand && matchCat && matchQ;
   });
   curPage=1; renderGrid(); renderPag();
