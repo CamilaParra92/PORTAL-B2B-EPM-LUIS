@@ -356,6 +356,29 @@ function isUnavail(p) {
   return p.unavail || p.stock < min;
 }
 
+// Orden de categorías por marca
+const CAT_ORDER = {
+  'Nail Pro':    ['PREPARADORES','GEL CONSTRUCTOR','ESMALTE PERMANENTE 15ML','ESMALTE PERMANENTE 8ML','ESMALTES ESPECIALES','POLYGEL','SOFT GEL','GEL PAINT','ACRILICOS','EFECTOS','INSUMOS MANICURE','LAMPARA','TORNO'],
+  'Avry Beauty': ['JELLY SPA','CREMA MANOS Y PIES','HIDRATACION'],
+  'Go Nails':    ['INSUMOS MANICURE','SOFT GEL','CREMA MANOS Y PIES','CREMA CORPORAL','LOCION CORPORAL','HIGIENIZANTE','GEL DE DUCHA','FRAGANCIA CORPORAL','EXFOLIANTE','MANTECA CORPORAL','HOME SPRAY','DIFUSOR AROMA','ACEITE CUTICULA','LAMPARA','SKIN'],
+  'Go Hair':     ['CAPILAR'],
+  'Go Paw':      ['FRAGANCIA MASCOTA'],
+  'Bluesky':     ['PREPARADORES','GEL CONSTRUCTOR','ESMALTE PERMANENTE 15ML','ESMALTES ESPECIALES','POLYGEL','EFECTOS','SOFT GEL','INSUMOS MANICURE'],
+  'Artistic':    ['PREPARADORES','GEL CONSTRUCTOR','ESMALTE PERMANENTE 15ML','ESMALTE TRADICIONAL 15ML','ESMALTES ESPECIALES','SOFT GEL','INSUMOS MANICURE','LAMPARA','TORNO']
+};
+function sortProducts(arr) {
+  return arr.slice().sort(function(a, b) {
+    const bi = BRAND_ORDER.indexOf(a.b) - BRAND_ORDER.indexOf(b.b);
+    if (bi !== 0) return bi;
+    const catA = (CAT_ORDER[a.b] || []).indexOf(a.c);
+    const catB = (CAT_ORDER[b.b] || []).indexOf(b.c);
+    const ci = (catA === -1 ? 99 : catA) - (catB === -1 ? 99 : catB);
+    if (ci !== 0) return ci;
+    return a.n.localeCompare(b.n, 'es');
+  });
+}
+
+
 const BRAND_ORDER = ['Nail Pro','Go Nails','Go Hair','Go Paw','Bluesky','Artistic','Avry Beauty'];
 const BRAND_CFG = {
   'Nail Pro':    {color:'#e91e8c',bg:'#fce4f1',min:0,disc:[{at:360000,pct:5},{at:720000,pct:10}]},
@@ -529,6 +552,7 @@ function doFilter() {
     if (!q && isUnavail(p)) return false;
     return matchBrand && matchCat && matchQ;
   });
+  filtered = sortProducts(filtered);
   curPage=1; renderGrid(); renderPag();
 }
 
