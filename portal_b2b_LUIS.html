@@ -778,13 +778,13 @@ function renderCart(){
       discEl.innerHTML='<div class="stot" style="font-size:.82rem;color:var(--ok);font-weight:700;border:none;padding-top:2px"><span>🎉 Descuento aplicado</span><span>−$'+tots.descuento.toLocaleString('es-CL')+'</span></div>';
     } else { discEl.innerHTML=''; }
   }
-  // Regalo sorpresa
+  // Regalo sorpresa: 1 regalo por cada $300.000 (total con IVA)
   const giftEl=document.getElementById('giftMsg');
   if(giftEl){
-    if(tots.totalConIva>=600000){
-      giftEl.innerHTML='<div style="background:#fff8e1;border:2px solid #f9c74f;border-radius:10px;padding:.75rem 1rem;margin-top:.5rem;font-size:.84rem;font-weight:700;color:#7b5e00">🎁 ¡Llevas <strong>2 regalos sorpresa</strong>! Son aleatorios y cambian cada mes.</div>';
-    } else if(tots.totalConIva>=300000){
-      giftEl.innerHTML='<div style="background:#fff8e1;border:2px solid #f9c74f;border-radius:10px;padding:.75rem 1rem;margin-top:.5rem;font-size:.84rem;font-weight:700;color:#7b5e00">🎁 ¡Llevas <strong>1 regalo sorpresa</strong>! Son aleatorios y cambian cada mes.</div>';
+    const numRegalos=Math.floor(tots.totalConIva/300000);
+    if(numRegalos>=1){
+      const rStr=numRegalos===1?'1 regalo sorpresa':numRegalos+' regalos sorpresa';
+      giftEl.innerHTML='<div style="background:#fff8e1;border:2px solid #f9c74f;border-radius:10px;padding:.75rem 1rem;margin-top:.5rem;font-size:.84rem;font-weight:700;color:#7b5e00">🎁 ¡Llevas <strong>'+rStr+'</strong>! Son aleatorios y cambian cada mes.</div>';
     } else {
       giftEl.innerHTML='';
     }
