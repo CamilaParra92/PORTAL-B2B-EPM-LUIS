@@ -161,24 +161,21 @@ textarea{resize:vertical;min-height:60px}
     <div class="fcard">
       <h2>👤 ¿Quién eres?</h2>
       <p style="font-size:.84rem;color:var(--mu);margin-bottom:1rem">Ingresa tus datos básicos para comenzar a comprar. Completarás el resto antes de confirmar tu pedido.</p>
+      <input type="hidden" id="q_rut" value="">
       <div class="fgrid">
-        <div class="fg">
-          <label>Nombre completo *</label>
+        <div class="fg full">
+          <label>Nombre de la persona natural *</label>
           <input id="q_nombre" placeholder="Juan Pérez González" oninput="liveVal(this,&#39;name&#39;)">
           <span class="fhint">Ej: Juan Pérez González</span>
           <span class="ferr">Ingresa nombre y apellido</span>
         </div>
-        <div class="fg">
-          <label>RUT *</label>
-          <input id="q_rut" placeholder="12.345.678-9" oninput="liveVal(this,&#39;rut&#39;)">
-          <span class="fhint">Formato: 12.345.678-9</span>
-          <span class="ferr">Formato inválido. Ej: 12.345.678-9</span>
-        </div>
         <div class="fg full">
           <label>Correo electrónico *</label>
-          <input type="email" id="q_email" placeholder="juan@correo.cl" oninput="liveVal(this,&#39;email&#39;)">
-          <span class="fhint">Ej: juan@correo.cl</span>
+          <input type="email" id="q_email" placeholder="juan@gmail.com" oninput="liveVal(this,&#39;email&#39;)" onblur="checkEmailDomain(this.value)">
+          <span class="fhint">Aquí recibirás el respaldo de tu pedido</span>
           <span class="ferr">Email inválido</span>
+          <span id="emailConfirm" style="font-size:.76rem;color:#15803d;font-weight:600;margin-top:3px;display:none"></span>
+          <span id="emailWarn" style="font-size:.76rem;color:#b45309;font-weight:600;margin-top:3px;display:none"></span>
         </div>
       </div>
     </div>
@@ -210,16 +207,16 @@ textarea{resize:vertical;min-height:60px}
       <div class="fcard">
         <h2>🧾 Tipo de documento</h2>
         <div class="radio-group">
-          <label class="radio-opt selected" id="opt_boleta" onclick="setTipo(&#39;boleta&#39;)">
-            <input type="radio" name="tipo" checked=""> Boleta
+          <label class="radio-opt" id="opt_boleta" onclick="setTipo(&#39;boleta&#39;)">
+            <input type="radio" name="tipo"> Boleta
           </label>
-          <label class="radio-opt" id="opt_factura" onclick="setTipo(&#39;factura&#39;)">
-            <input type="radio" name="tipo"> Factura
+          <label class="radio-opt selected" id="opt_factura" onclick="setTipo(&#39;factura&#39;)">
+            <input type="radio" name="tipo" checked=""> Factura
           </label>
         </div>
       </div>
       <!-- BOLETA -->
-      <div id="secBoleta">
+      <div id="secBoleta" style="display:none">
         <div class="fcard">
           <h2>👤 Datos de despacho</h2>
           <div class="fgrid">
@@ -232,7 +229,7 @@ textarea{resize:vertical;min-height:60px}
         </div>
       </div>
       <!-- FACTURA -->
-      <div id="secFactura" style="display:none">
+      <div id="secFactura">
         <div class="fcard">
           <h2>🏢 Datos de facturación</h2>
           <div class="fgrid">
@@ -281,6 +278,7 @@ textarea{resize:vertical;min-height:60px}
         <div class="stot"><span>Subtotal neto</span><span id="totAmt">$0</span></div>
         <div class="stot" style="font-size:.78rem;color:var(--mu);font-weight:600;border:none;padding-top:2px"><span>IVA 19%</span><span id="totIva">$0</span></div>
         <div id="totDesc"></div>
+        <div id="giftMsg"></div>
         <div class="stot" style="font-size:1.05rem;margin-top:.5rem;padding-top:.65rem;border-top:2px solid var(--bo)"><span>Total con IVA</span><span id="totFin">$0</span></div>
         <div id="alerts" style="margin-top:.75rem"></div>
         <button class="btn" style="width:100%;margin-top:1rem;justify-content:center" id="previewBtn" onclick="openPreview()">👁 Revisar antes de enviar</button>
@@ -402,7 +400,7 @@ function validateAll(fields) {
   return allOk;
 }
 
-let cart={}, okEmp=false, curBrand='all', curCat='all', curPage=1, filtered=[], tipoDoc='boleta';
+let cart={}, okEmp=false, curBrand='all', curCat='all', curPage=1, filtered=[], tipoDoc='factura';
 const PG=48;
 
 function setTipo(t) {
@@ -426,6 +424,32 @@ function verifyAddr(calleId, comunaId, ciudadId) {
   var existing = document.getElementById(previewId);
   if (existing) { existing.remove(); }
   var src = 'https://maps.google.com/maps?q=' + encodeURIComponent(query) + '&output=embed&hl=es';
+  // Autocompletar comuna y ciudad via Nominatim si se pasan esos ids
+  if (comunaId || ciudadId) {
+    var parts = query.split(',').map(function(s){return s.trim();}).filter(Boolean);
+    if (comunaId && parts.length >= 2) {
+      var cel = document.getElementById(comunaId);
+      if (cel && !cel.value.trim()) cel.value = parts[1];
+    }
+    if (ciudadId && parts.length >= 3) {
+      var zel = document.getElementById(ciudadId);
+      if (zel && !zel.value.trim()) zel.value = parts.slice(2).join(', ');
+    }
+    fetch('https://nominatim.openstreetmap.org/search?format=json&countrycodes=cl&addressdetails=1&q=' + encodeURIComponent(query + ', Chile'))
+      .then(function(r){return r.json();})
+      .then(function(data){
+        if (!data || !data[0] || !data[0].address) return;
+        var addr = data[0].address;
+        if (comunaId) {
+          var cel2 = document.getElementById(comunaId);
+          if (cel2) { var v = addr.suburb||addr.neighbourhood||addr.city_district||addr.town||addr.municipality||''; if(v) cel2.value=v; }
+        }
+        if (ciudadId) {
+          var zel2 = document.getElementById(ciudadId);
+          if (zel2) { var r2 = addr.state||''; var ci = addr.city||addr.town||''; zel2.value = (ci&&r2)?ci+', '+r2:r2||ci; }
+        }
+      }).catch(function(){});
+  }
   var div = document.createElement('div');
   div.id = previewId;
   div.className = 'map-preview';
@@ -754,6 +778,17 @@ function renderCart(){
       discEl.innerHTML='<div class="stot" style="font-size:.82rem;color:var(--ok);font-weight:700;border:none;padding-top:2px"><span>🎉 Descuento aplicado</span><span>−$'+tots.descuento.toLocaleString('es-CL')+'</span></div>';
     } else { discEl.innerHTML=''; }
   }
+  // Regalo sorpresa
+  const giftEl=document.getElementById('giftMsg');
+  if(giftEl){
+    if(tots.totalConIva>=600000){
+      giftEl.innerHTML='<div style="background:#fff8e1;border:2px solid #f9c74f;border-radius:10px;padding:.75rem 1rem;margin-top:.5rem;font-size:.84rem;font-weight:700;color:#7b5e00">🎁 ¡Llevas <strong>2 regalos sorpresa</strong>! Son aleatorios y cambian cada mes.</div>';
+    } else if(tots.totalConIva>=300000){
+      giftEl.innerHTML='<div style="background:#fff8e1;border:2px solid #f9c74f;border-radius:10px;padding:.75rem 1rem;margin-top:.5rem;font-size:.84rem;font-weight:700;color:#7b5e00">🎁 ¡Llevas <strong>1 regalo sorpresa</strong>! Son aleatorios y cambian cada mes.</div>';
+    } else {
+      giftEl.innerHTML='';
+    }
+  }
   document.getElementById('sumRows').innerHTML=Object.values(cart).slice(0,5).map(function(item){
     var p=item.product, qty=item.qty;
     var e=ep(p.b,bt[p.b]?.raw||0,p.pm,rawTotal);
@@ -778,6 +813,29 @@ function renderCart(){
   document.getElementById('previewBtn').style.opacity=okBtn?1:.5;
 }
 
+
+function checkEmailDomain(email) {
+  var conf = document.getElementById('emailConfirm');
+  var warn = document.getElementById('emailWarn');
+  if (!conf || !warn) return;
+  var m = email.trim().match(/^[^\s@]+@([^\s@]+\.[^\s@]+)$/);
+  if (!m) { conf.style.display='none'; warn.style.display='none'; return; }
+  var domain = m[1].toLowerCase();
+  conf.textContent = '📧 Tu respaldo llegará a: ' + email.trim();
+  conf.style.display = 'block';
+  var typos = {
+    'gmai.com':'gmail.com','gmial.com':'gmail.com','gmail.con':'gmail.com',
+    'hotmai.com':'hotmail.com','hotmail.con':'hotmail.com','otmail.com':'hotmail.com',
+    'outlok.com':'outlook.com','outloook.com':'outlook.com','outlook.con':'outlook.com',
+    'yaho.com':'yahoo.com','yahoo.con':'yahoo.com'
+  };
+  if (typos[domain]) {
+    warn.textContent = '⚠️ ¿Quisiste escribir @' + typos[domain] + '? Verifica tu correo.';
+    warn.style.display = 'block';
+  } else {
+    warn.style.display = 'none';
+  }
+}
 function setQC(sku,val){setQ(sku,val);renderCart();}
 function rmItem(sku){
   delete cart[sku];
@@ -798,7 +856,7 @@ function goStep(n){
 
 function nextToProducts(){
   // Solo valida los 3 campos del paso 1: nombre, rut y correo
-  const fields=[['q_nombre','name'],['q_rut','rut'],['q_email','email']];
+  const fields=[['q_nombre','name'],['q_email','email']];
   if(!validateAll(fields)){alert('Completa los campos marcados en rojo para continuar.');return;}
   okEmp=true; goStep(1);
 }
