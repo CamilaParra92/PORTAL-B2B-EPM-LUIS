@@ -514,7 +514,7 @@ function doFilter() {
     const matchQ = !q || p.n.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q);
     if (!q && p.unavail) return false;
     return matchBrand && matchCat && matchQ;
-  });
+  }).sort((a,b) => a.n.localeCompare(b.n, 'es'));
   curPage=1; renderGrid(); renderPag();
 }
 
