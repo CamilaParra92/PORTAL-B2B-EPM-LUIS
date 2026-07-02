@@ -545,7 +545,12 @@ function doFilter() {
     const matchBrand = curBrand==='all' || p.b===curBrand;
     const matchCat = curCat==='all' || p.c===curCat;
     const matchQ = !q || p.n.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q);
-    if (!q && p.unavail) return false;
+    if (!q) {
+      if (p.unavail) return false;
+      // Mínimos de stock por marca
+      if ((p.b==='Nail Pro'||p.b==='Avry Beauty') && p.stock<=20) return false;
+      if (['Bluesky','Go Nails','Go Paw','Go Skin','Go Hair','Go Living'].includes(p.b) && p.stock<=30) return false;
+    }
     return matchBrand && matchCat && matchQ;
   }).sort((a,b) => a.n.localeCompare(b.n, 'es'));
   curPage=1; renderGrid(); renderPag();
