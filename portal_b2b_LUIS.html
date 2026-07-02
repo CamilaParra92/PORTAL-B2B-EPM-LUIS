@@ -283,15 +283,7 @@ textarea{resize:vertical;min-height:60px}
         <div id="alerts" style="margin-top:.75rem"></div>
         <button class="btn" style="width:100%;margin-top:1rem;justify-content:center" id="previewBtn" onclick="openPreview()">👁 Revisar antes de enviar</button>
         <p style="font-size:.7rem;color:var(--mu);text-align:center;margin-top:.5rem">Revisa el resumen antes de confirmar</p>
-        <div style="background:#FEF0F5;border:1.5px solid #E64287;border-radius:12px;padding:.85rem 1rem;color:#1D1C1A;margin-top:.75rem;font-family:'Montserrat',sans-serif">
-          <div style="display:flex;align-items:flex-start;gap:8px">
-            <span style="font-size:18px;line-height:1.2;flex-shrink:0">📋</span>
-            <div>
-              <p style="margin:0 0 5px 0;font-size:.78rem;font-weight:700;color:#1D1C1A;letter-spacing:.1px">Sobre tu cotización y reserva de stock</p>
-              <p style="margin:0;font-size:.75rem;line-height:1.65;color:#3a2030">Tu cotización es una referencia inicial. Una vez que nuestro equipo confirme el stock disponible y te enviemos la <strong>Nota de Venta oficial</strong>, el stock quedará reservado exclusivamente para ti durante <strong>48 horas hábiles</strong>. Si el pago no se confirma dentro de ese plazo, la reserva se libera automáticamente y deberás generar el pedido nuevamente sujeto a disponibilidad. Te recomendamos confirmar tu pago a la brevedad para asegurar tus productos. 🙌</p>
-            </div>
-          </div>
-        </div>
+
       </div>
     </div>
   </div>
@@ -865,6 +857,7 @@ function goStep(n){
   document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n));
   document.querySelectorAll('.stp').forEach((s,i)=>{s.classList.remove('active','done');if(i===n)s.classList.add('active');else if(i<n)s.classList.add('done');});
   if(n===2)renderCart();
+  var nb=document.getElementById('noticeFija');if(nb)nb.style.display=(n===1||n===2)?'block':'none';
   window.scrollTo(0,0);
 }
 
@@ -1000,4 +993,28 @@ init();
 </script>
 
 
+
+  <!-- BARRA FIJA AVISO COTIZACIÓN -->
+  <div id="noticeFija" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:999;background:#FEF0F5;border-top:2px solid #E64287;font-family:'Montserrat',sans-serif;box-shadow:0 -2px 12px rgba(230,66,135,.18)">
+    <div style="max-width:560px;margin:0 auto;padding:.55rem 1rem .55rem 1rem">
+      <div style="display:flex;align-items:center;gap:8px;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0">
+          <span style="font-size:16px;flex-shrink:0">📋</span>
+          <div style="min-width:0">
+            <p style="margin:0;font-size:.7rem;font-weight:700;color:#1D1C1A">Sobre tu cotización y reserva de stock</p>
+            <p style="margin:0;font-size:.68rem;color:#3a2030;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="noticeShort">Stock reservado 48 hrs hábiles desde la Nota de Venta oficial. <span style="color:#E64287;font-weight:600;cursor:pointer" onclick="toggleNotice()">Ver más ▸</span></p>
+            <p style="margin:0;font-size:.68rem;color:#3a2030;line-height:1.55;display:none" id="noticeFull">Tu cotización es una referencia inicial. Una vez que confirmemos el stock y te enviemos la <strong>Nota de Venta oficial</strong>, el stock queda reservado para ti durante <strong>48 horas hábiles</strong>. Si el pago no se confirma, la reserva se libera y deberás generar el pedido nuevamente. <span style="color:#E64287;font-weight:600;cursor:pointer" onclick="toggleNotice()">Ver menos ▴</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+  function toggleNotice(){
+    var s=document.getElementById('noticeShort');
+    var f=document.getElementById('noticeFull');
+    if(f.style.display==='none'){f.style.display='block';s.style.display='none';}
+    else{f.style.display='none';s.style.display='';}
+  }
+  </script>
 </body></html>
