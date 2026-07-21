@@ -864,21 +864,9 @@ function goStep(n){
 }
 
 function nextToProducts(){
-  // Validar campos comunes
-  const commonFields=[['q_nombre','name'],['q_email','email']];
-  if(!validateAll(commonFields)){alert('Completa los campos marcados en rojo para continuar.');return;}
-  // Validar campos específicos según tipo de documento
-  if(tipoDoc==='boleta'){
-    const bFields=[['b_tel','phone'],['b_calle','addr'],['b_comuna','free']];
-    if(!validateAll(bFields)){alert('Para continuar debes ingresar teléfono, calle y comuna de despacho.');return;}
-  } else {
-    const fFields=[['f_razon','free'],['f_rut','rut'],['f_giro','free'],['f_dir_fact','addr'],['f_tel','phone']];
-    if(!validateAll(fFields)){alert('Para continuar completa todos los datos de facturación (marcados en rojo).');return;}
-    if(document.getElementById('f_diff')&&document.getElementById('f_diff').checked){
-      const dd=document.getElementById('f_dir_desp');
-      if(!dd||!dd.value.trim()){if(dd){dd.focus();dd.classList.add('err');}alert('Ingresa la dirección de despacho.');return;}
-    }
-  }
+  // Paso 1: solo valida nombre y email para acceder al catálogo
+  const fields=[['q_nombre','name'],['q_email','email']];
+  if(!validateAll(fields)){alert('Completa los campos marcados en rojo para continuar.');return;}
   okEmp=true; goStep(1);
 }
 
