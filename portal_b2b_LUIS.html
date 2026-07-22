@@ -220,6 +220,7 @@ textarea{resize:vertical;min-height:60px}
         <div class="fcard">
           <h2>👤 Datos de despacho</h2>
           <div class="fgrid">
+            <div class="fg"><label>RUT *</label><input id="b_rut" placeholder="12.345.678-9" oninput="liveVal(this,'rut')"><span class="fhint">Ej: 12.345.678-9</span><span class="ferr">RUT inválido (ej: 12.345.678-9)</span></div>
             <div class="fg"><label>Teléfono *</label><input id="b_tel" placeholder="+56 9 1234 5678" oninput="liveVal(this,&#39;phone&#39;)"><span class="fhint">Ej: +56 9 1234 5678</span><span class="ferr">Ej: +56 9 1234 5678</span></div>
             <div class="fg"><label>Calle y número *</label><input id="b_calle" placeholder="Av. Providencia 1234, Providencia" oninput="liveVal(this,&#39;addr&#39;)"> <button type="button" onclick="verifyAddr('b_calle','b_comuna','b_ciudad')" class="map-btn" title="Verificar dirección en mapa">&#128205; Ver en mapa</button><span class="fhint">Ej: Av. Providencia 1234, Providencia</span><span class="ferr">Ingresa calle y número</span></div>
             <div class="fg"><label>Depto / Oficina</label><input id="b_depto" placeholder="Depto 501 (opcional)"></div>
@@ -923,7 +924,7 @@ function closePreview(){document.getElementById('modalBg').style.display='none';
 
 function validateFullForm(){
   if(tipoDoc==='boleta'){
-    const bFields=[['b_tel','phone'],['b_calle','addr'],['b_comuna','free']];
+    const bFields=[['b_rut','rut'],['b_tel','phone'],['b_calle','addr'],['b_comuna','free']];
     if(!validateAll(bFields)){alert('Completa el teléfono y la dirección de despacho antes de enviar.');return false;}
   } else {
     const fFields=[['f_razon','free'],['f_rut','rut'],['f_giro','free'],['f_dir_fact','addr'],['f_tel','phone']];
@@ -965,7 +966,7 @@ async function submitOrder(){
   curPage=1;
   tipoDoc='boleta';
   ['q_nombre','q_rut','q_email',
-   'b_tel','b_calle','b_depto','b_comuna','b_ciudad',
+   'b_rut','b_tel','b_calle','b_depto','b_comuna','b_ciudad',
    'f_razon','f_rut','f_giro','f_dir_fact','f_tel','f_email','f_dir_desp','notas']
     .forEach(function(id){var e=document.getElementById(id);if(e){e.value='';e.classList.remove('err','good');}});
   document.getElementById('f_diff').checked=false;
@@ -979,7 +980,7 @@ function resetAll(){
   const _sb=document.getElementById('submitBtn');if(_sb){_sb.textContent='✓ Enviar cotización de pedido';_sb.disabled=false;}
   cart={}; okEmp=false; curBrand='all'; curCat='all'; curPage=1; tipoDoc='boleta';
   ['q_nombre','q_rut','q_email',
-   'b_tel','b_calle','b_depto','b_comuna','b_ciudad',
+   'b_rut','b_tel','b_calle','b_depto','b_comuna','b_ciudad',
    'f_razon','f_rut','f_giro','f_dir_fact','f_tel','f_email','f_dir_desp','notas']
     .forEach(id=>{const e=document.getElementById(id);if(e){e.value='';e.classList.remove('err','good');}});
   document.getElementById('f_diff').checked=false;
