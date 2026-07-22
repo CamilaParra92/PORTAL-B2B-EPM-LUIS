@@ -951,6 +951,7 @@ async function submitOrder(){
   const payload={type:'pedido',vendedor:'Luis',code,timestamp:new Date().toISOString(),tipoDoc,cliente:getClient(),notas:document.getElementById('notas').value,items,subtotal:tots.neto,iva:tots.iva,total:tots.totalConIva,descuento:tots.descuento,sendClientEmail:true};
   if(WEBHOOK_URL){try{await Promise.race([fetch(WEBHOOK_URL,{method:'POST',body:JSON.stringify(payload),headers:{'Content-Type':'application/json'},mode:'no-cors'}),new Promise(r=>setTimeout(r,8000))]);}catch(e){}}
   // Go to success screen first (before clearing okEmp)
+  sb.textContent='✓ Enviar cotización de pedido'; sb.disabled=false;
   closePreview();
   // Show step 3 directly without the okEmp guard
   document.querySelectorAll('.panel').forEach(function(p,i){p.classList.toggle('active',i===3);});
@@ -975,6 +976,7 @@ async function submitOrder(){
 }
 
 function resetAll(){
+  const _sb=document.getElementById('submitBtn');if(_sb){_sb.textContent='✓ Enviar cotización de pedido';_sb.disabled=false;}
   cart={}; okEmp=false; curBrand='all'; curCat='all'; curPage=1; tipoDoc='boleta';
   ['q_nombre','q_rut','q_email',
    'b_tel','b_calle','b_depto','b_comuna','b_ciudad',
