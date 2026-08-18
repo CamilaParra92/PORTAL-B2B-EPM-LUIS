@@ -1035,4 +1035,29 @@ init();
   });
 })();
 </script>
+<script>
+/* BOTONES_DINAMICOS_V4 */
+(function(){
+var bar=document.getElementById('brandsBar');
+var old=bar.querySelectorAll('.bbtn:not([data-b="all"])');
+old.forEach(function(b){b.parentNode.removeChild(b);});
+var ORDER=['Nail Pro','Go Nails','Go Hair','Go Paw','Go Living','Bluesky','Artistic','Avry Beauty','Ambar','The Fruit Company','Aroma Home'];
+var brands=[...new Set(PRODUCTS_DATA.map(function(p){return p.b;}).filter(Boolean))];
+brands.sort(function(x,y){
+  var ix=ORDER.indexOf(x),iy=ORDER.indexOf(y);
+  if(ix>=0&&iy>=0)return ix-iy;
+  if(ix>=0)return -1;
+  if(iy>=0)return 1;
+  return x.localeCompare(y,'es');
+});
+brands.forEach(function(brand){
+  var btn=document.createElement('button');
+  btn.className='bbtn ';
+  btn.setAttribute('data-b',brand);
+  btn.textContent=brand;
+  btn.addEventListener('click',function(){setBrand(brand,this);});
+  bar.appendChild(btn);
+});
+})();
+</script>
 </body></html>
