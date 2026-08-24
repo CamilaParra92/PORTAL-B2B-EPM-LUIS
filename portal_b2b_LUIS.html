@@ -676,7 +676,7 @@ function getClient(){
   const qRut    = document.getElementById('q_rut').value;
   const qEmail  = document.getElementById('q_email').value;
   if(tipoDoc==='boleta') return {tipo:'Boleta',
-    nombre:qNombre, rut:qRut, email:qEmail,
+    nombre:qNombre, rut:document.getElementById('b_rut').value, email:qEmail,
     tel:document.getElementById('b_tel').value,
     dir:document.getElementById('b_calle').value+(document.getElementById('b_depto').value?', '+document.getElementById('b_depto').value:''),
     comuna:document.getElementById('b_comuna').value,
@@ -924,7 +924,7 @@ function closePreview(){document.getElementById('modalBg').style.display='none';
 function validateFullForm(){
   if(tipoDoc==='boleta'){
     const bFields=[['b_rut','rut'],['b_tel','phone'],['b_calle','addr'],['b_comuna','free']];
-    if(!validateAll(bFields)){alert('Completa el teléfono y la dirección de despacho antes de enviar.');return false;}
+    if(!validateAll(bFields)){alert('Completa el RUT, teléfono y dirección de despacho antes de enviar.');return false;}
   } else {
     const fFields=[['f_razon','free'],['f_rut','rut'],['f_giro','free'],['f_dir_fact','addr'],['f_tel','phone']];
     if(!validateAll(fFields)){alert('Completa los datos de facturación marcados en rojo.');return false;}
