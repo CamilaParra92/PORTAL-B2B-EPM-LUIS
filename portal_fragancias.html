@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Portal B2B FRAGANCIAS — EPM</title>
+<style>body{margin:0;background:#1a0a2e;display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column}p{color:#fff;font-family:sans-serif;font-size:1.1rem}span{color:#e91e8c;font-weight:700}</style>
+</head><body><p><span>EPM</span> Mayorista</p><p>Cargando portal FRAGANCIAS...</p>
+<script>
+fetch('https://raw.githubusercontent.com/camilaparra92/PORTAL-B2B-EPM-LUIS/main/fragancias_l.html?v='+Date.now())
+.then(r=>r.text()).then(h=>{document.open('text/html','replace');document.write(h);document.close();})
+.catch(e=>{document.body.innerHTML='<p style="color:#fff;font-family:sans-serif;padding:40px">Error al cargar portal. <a href="javascript:location.reload()" style="color:#e91e8c">Reintentar</a></p>';});
+</script></body></html>
