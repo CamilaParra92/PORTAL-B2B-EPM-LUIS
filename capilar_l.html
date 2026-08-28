@@ -1042,41 +1042,20 @@ brands.forEach(function(brand){
 });
 })();
 </script>
+
 <script id="_minOrderScript">
 (function(){
 var MIN=180000;
-function fmt(n){return '</html>
-+Math.round(n).toLocaleString('es-CL');}
-var sticky=document.createElement('div');
-sticky.id='_minSticky';
-var hdr=document.querySelector('header');
-var top=(hdr?hdr.offsetHeight:60)+'px';
-sticky.style.cssText='position:fixed;top:'+top+';left:0;right:0;z-index:9999;font-family:sans-serif;font-size:.85rem;pointer-events:none;box-shadow:0 2px 6px rgba(0,0,0,.15)';
-document.body.appendChild(sticky);
-function upd(){
-  var total=typeof calcTotal==='function'?calcTotal():0;
-  var falta=Math.max(0,MIN-total);
-  var pct=Math.min(100,(total/MIN)*100).toFixed(1);
-  if(falta<=0){
-    sticky.innerHTML='<div style="background:#15803d;color:#fff;padding:7px 16px;text-align:center;font-weight:700">&#x2705; M\xednimo alcanzado ('+fmt(total)+') \u2014 puedes enviar tu pedido</div>';
-  }else{
-    sticky.innerHTML='<div style="background:#fff7ed;border-bottom:2px solid #f97316;padding:7px 16px"><div style="display:flex;align-items:center;gap:12px;max-width:800px;margin:0 auto"><span style="color:#c2410c;font-weight:700;white-space:nowrap">&#x26A0;&#xFE0F; Faltan <b>'+fmt(falta)+'</b></span><div style="flex:1;background:#e5e7eb;border-radius:4px;height:7px;min-width:60px"><div style="background:#f97316;width:'+pct+'%;height:7px;border-radius:4px;transition:width .4s"></div></div><span style="color:#6b7280;font-size:.79rem;white-space:nowrap">'+fmt(total)+' / $180.000</span></div></div>';
-  }
-}
-document.addEventListener('click',function(e){
-  var btn=e.target;
-  if(btn.id!=='submitBtn'){btn=(btn.closest&&btn.closest('#submitBtn'))||null;}
-  if(!btn)return;
-  var total=typeof calcTotal==='function'?calcTotal():0;
-  if(total<MIN){
-    e.stopImmediatePropagation();
-    e.preventDefault();
-    var falta=MIN-total;
-    alert('\u26A0\uFE0F Pedido incompleto\n\nTu carrito lleva '+fmt(total)+'.\nTe faltan '+fmt(falta)+' para alcanzar el m\xednimo de $180.000.\n\nAgrega m\xe1s productos y vuelve a intentarlo.');
-  }
-},true);
-upd();
-setInterval(upd,500);
+function fmt(n){var d='$';return d+Math.round(n).toLocaleString('es-CL');}
+var s=document.createElement('div');s.id='_minSticky';
+var hd=document.querySelector('header');
+s.style.cssText='position:fixed;top:'+(hd?hd.offsetHeight:60)+'px;left:0;right:0;z-index:9999;font-family:sans-serif;font-size:.85rem;pointer-events:none;box-shadow:0 2px 6px rgba(0,0,0,.15)';
+document.body.appendChild(s);
+function upd(){var t=typeof calcTotal==='function'?calcTotal():0,f=Math.max(0,MIN-t);
+s.innerHTML=f<=0?'<div style="background:#15803d;color:#fff;padding:7px 16px;text-align:center;font-weight:700">&#x2705; Mínimo alcanzado ('+fmt(t)+') — puedes enviar tu pedido</div>':'<div style="background:#fff7ed;border-bottom:2px solid #f97316;padding:7px 16px;display:flex;justify-content:space-between;align-items:center"><span>⚠️ Faltan <b>'+fmt(f)+'</b> para el mínimo</span><span style="color:#92400e">'+fmt(t)+' / '+fmt(MIN)+'</span></div>';}
+document.addEventListener('click',function(e){var b=e.target;if(b.id!=='submitBtn')b=(b.closest&&b.closest('#submitBtn'))||null;if(!b)return;var t=typeof calcTotal==='function'?calcTotal():0;if(t<MIN){e.stopImmediatePropagation();e.preventDefault();alert('⚠️ Pedido incompleto\n\nTu carrito lleva '+fmt(t)+'.\nTe faltan '+fmt(MIN-t)+' para alcanzar el mínimo de '+fmt(MIN)+'.\n\nAgrega más productos y vuelve a intentarlo.');}},true);
+(function(){var cb=document.getElementById('catsBar');if(!cb||typeof BRAND_CATS==='undefined')return;var al=[];Object.values(BRAND_CATS).forEach(function(cs){cs.forEach(function(c){if(al.indexOf(c)<0)al.push(c);});});cb.querySelectorAll('button').forEach(function(b){var t=b.textContent.trim();if(t!=='Todas'&&al.indexOf(t)<0)b.remove();});})();
+upd();setInterval(upd,500);
 })();
 </script>
 </body></html>
