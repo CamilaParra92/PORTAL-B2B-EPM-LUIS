@@ -8,7 +8,7 @@
 <script>
 fetch('https://raw.githubusercontent.com/camilaparra92/PORTAL-B2B-EPM-LUIS/main/fragancias_l.html',{cache:'no-store'})
 .then(function(r){return r.text();})
-.then(function(h){document.open('text/html','replace');document.write(h);document.close();})
-.catch(function(e){document.body.innerHTML='<p style="font-family:sans-serif;color:#fff;padding:40px">Error al cargar. <a href="javascript:location.reload()" style="color:#e91e8c">Reintentar</a></p>';});
+.then(function(h){document.open();document.write(h);document.close();})
+.catch(function(){document.body.innerHTML='<p style="font-family:sans-serif;color:#fff;padding:40px">Error al cargar. <a href="javascript:location.reload()" style="color:#e91e8c">Reintentar</a></p>';});
 </script>
 </body></html>
