@@ -1047,6 +1047,20 @@ brands.forEach(function(brand){
 (function(){
 var MIN=180000;
 function fmt(n){return '$'+Math.round(n).toLocaleString('es-CL');}
+var sticky=document.createElement('div');
+sticky.id='_minSticky';
+sticky.style.cssText='position:fixed;bottom:0;left:0;right:0;z-index:99999;font-family:sans-serif;font-size:.85rem;pointer-events:none';
+document.body.appendChild(sticky);
+function upd(){
+  var total=typeof calcTotal==='function'?calcTotal():0;
+  var falta=Math.max(0,MIN-total);
+  var pct=Math.min(100,(total/MIN)*100).toFixed(1);
+  if(falta<=0){
+    sticky.innerHTML='<div style="background:#15803d;color:#fff;padding:8px 16px;text-align:center;font-weight:700">&#x2705; M\xednimo alcanzado ('+fmt(total)+') \u2014 puedes enviar tu pedido</div>';
+  }else{
+    sticky.innerHTML='<div style="background:#fff7ed;border-top:2px solid #f97316;padding:8px 16px"><div style="display:flex;align-items:center;gap:10px;max-width:700px;margin:0 auto"><span style="color:#c2410c;font-weight:700;white-space:nowrap">&#x26A0;&#xFE0F; Faltan <b>'+fmt(falta)+'</b></span><div style="flex:1;background:#e5e7eb;border-radius:4px;height:8px;min-width:60px"><div style="background:#f97316;width:'+pct+'%;height:8px;border-radius:4px;transition:width .3s"></div></div><span style="color:#6b7280;font-size:.78rem;white-space:nowrap">'+fmt(total)+' / $180.000</span></div></div>';
+  }
+}
 document.addEventListener('click',function(e){
   var btn=e.target;
   if(btn.id!=='submitBtn'){btn=(btn.closest&&btn.closest('#submitBtn'))||null;}
@@ -1056,34 +1070,10 @@ document.addEventListener('click',function(e){
     e.stopImmediatePropagation();
     e.preventDefault();
     var falta=MIN-total;
-    alert('\u26A0\uFE0F Pedido incompleto\n\nTu carrito lleva '+fmt(total)+'.\nTe faltan '+fmt(falta)+' para alcanzar el m\xednimo de $180.000.\n\nAgrega m\xe1s productos para continuar.');
+    alert('\u26A0\uFE0F Pedido incompleto\n\nTu carrito lleva '+fmt(total)+'.\nTe faltan '+fmt(falta)+' para alcanzar el m\xednimo de $180.000.\n\nAgrega m\xe1s productos y vuelve a intentarlo.');
   }
 },true);
-function updateBar(){
-  var bar=document.getElementById('_minBar');
-  if(!bar)return;
-  var total=typeof calcTotal==='function'?calcTotal():0;
-  var falta=Math.max(0,MIN-total);
-  var pct=Math.min(100,(total/MIN)*100).toFixed(1);
-  if(falta<=0){
-    bar.innerHTML='<div style="background:#dcfce7;border:1.5px solid #16a34a;border-radius:8px;padding:10px 14px;margin:10px 0 6px;font-size:.87rem;font-weight:700;color:#15803d">&#x2705; M\xednimo alcanzado \u2014 ya puedes enviar tu pedido</div>';
-  }else{
-    bar.innerHTML='<div style="background:#fff7ed;border:1.5px solid #f97316;border-radius:8px;padding:10px 14px;margin:10px 0 6px;font-size:.87rem"><div style="font-weight:700;color:#c2410c;margin-bottom:6px">&#x26A0;&#xFE0F; Faltan <b>'+fmt(falta)+'</b> para completar el m\xednimo de compra</div><div style="background:#e5e7eb;border-radius:4px;height:8px;overflow:hidden"><div style="background:#f97316;width:'+pct+'%;height:8px;border-radius:4px;transition:width .3s"></div></div><div style="color:#6b7280;font-size:.78rem;margin-top:4px">Tu carrito: '+fmt(total)+' / $180.000 m\xednimo</div></div>';
-  }
-}
-function injectBar(){
-  var btn=document.getElementById('submitBtn');
-  if(!btn||document.getElementById('_minBar'))return;
-  var bar=document.createElement('div');
-  bar.id='_minBar';
-  btn.parentElement.insertBefore(bar,btn);
-  updateBar();
-}
-var mo=new MutationObserver(function(){
-  if(!document.getElementById('_minBar'))injectBar();
-  else updateBar();
-});
-mo.observe(document.body,{childList:true,subtree:true});
-injectBar();
+upd();
+setInterval(upd,500);
 })();
 </script>/body></html>
