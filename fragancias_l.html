@@ -1042,4 +1042,50 @@ brands.forEach(function(brand){
 });
 })();
 </script>
-</body></html>
+
+<script id="_minOrderScript">
+(function(){
+  var MIN=180000;
+  function fmt(n){return '</html>
++Math.round(n).toLocaleString('es-CL');}
+  function updateBar(){
+    var bar=document.getElementById('_minBar');
+    if(!bar)return;
+    var total=typeof calcTotal==='function'?calcTotal():0;
+    var falta=Math.max(0,MIN-total);
+    var pct=Math.min(100,(total/MIN)*100).toFixed(1);
+    if(falta<=0){
+      bar.innerHTML='<div style="background:#dcfce7;border:1.5px solid #16a34a;border-radius:8px;padding:10px 14px;margin:10px 0 6px;font-size:.87rem;font-weight:700;color:#15803d">&#x2705; M\xednimo alcanzado — ya puedes enviar tu pedido</div>';
+    }else{
+      bar.innerHTML='<div style="background:#fff7ed;border:1.5px solid #f97316;border-radius:8px;padding:10px 14px;margin:10px 0 6px;font-size:.87rem"><div style="font-weight:700;color:#c2410c;margin-bottom:6px">&#x26A0;&#xFE0F; Faltan <b>'+fmt(falta)+'</b> para el m\xednimo de compra</div><div style="background:#e5e7eb;border-radius:4px;height:8px;overflow:hidden"><div style="background:#f97316;width:'+pct+'%;height:8px;border-radius:4px;transition:width .3s"></div></div><div style="color:#6b7280;font-size:.78rem;margin-top:4px">Tu carrito: '+fmt(total)+' / '+fmt(MIN)+' m\xednimo</div></div>';
+    }
+  }
+  function injectBar(){
+    var btn=document.getElementById('submitBtn');
+    if(!btn||document.getElementById('_minBar'))return;
+    var bar=document.createElement('div');
+    bar.id='_minBar';
+    btn.parentElement.insertBefore(bar,btn);
+    updateBar();
+  }
+  if(typeof renderCart==='function'){
+    var _rc=renderCart;
+    window.renderCart=function(){_rc.apply(this,arguments);setTimeout(function(){injectBar();updateBar();},30);};
+  }
+  if(typeof submitOrder==='function'){
+    var _so=submitOrder;
+    window.submitOrder=function(){
+      var total=typeof calcTotal==='function'?calcTotal():0;
+      if(total<MIN){
+        var falta=MIN-total;
+        alert('\u26A0\uFE0F Pedido incompleto\n\nTu carrito lleva '+fmt(total)+'.\nTe faltan '+fmt(falta)+' para alcanzar el m\xednimo de '+fmt(MIN)+'.\n\nAgrega m\xe1s productos para continuar.');
+        return;
+      }
+      _so.apply(this,arguments);
+    };
+  }
+  var mo=new MutationObserver(function(){injectBar();updateBar();});
+  mo.observe(document.body,{childList:true,subtree:true});
+  injectBar();
+})();
+</script></body></html>
