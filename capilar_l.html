@@ -4,7 +4,7 @@
 <html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portal B2B CAPILAR — EPM</title>
+<title>Portal Pedidos B2B — EPM (Luis)</title>
 <style>
 :root{--pr:#1a0a2e;--ac:#e91e8c;--ac2:#1a0a2e;--bg:#faf9f7;--sf:#fff;--bo:#e5e2de;--tx:#1a0a2e;--mu:#7a7080;--ok:#15803d;--okb:#f0fdf4;--wa:#92400e;--wab:#fffbeb}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -337,7 +337,7 @@ textarea{resize:vertical;min-height:60px}
 const WEBHOOK_URL = "https://script.google.com/a/macros/nailoutlet.cl/s/AKfycbyBBomGgQ88IFYIw_wU69oN_jG6pShvnW3_oM1S1gsqKuxnqgVm-1YDKgs2-hRAiw9n/exec";
 
 const PRODUCTS_DATA = [{"sku":"501298","n":"Go Hair - Aceite Capilar Hidratante 30 ml - Cotton Candy","b":"Go Hair","c":"CAPILAR","pm":6425,"stock":1329,"unavail":false,"img":"https://cdn.shopify.com/s/files/1/0921/2936/2233/files/AceiteCapilarGoHairFondo.png?v=1770835916","ps":9990},{"sku":"501299","n":"Go Hair - Aceite Capilar Hidratante 30 ml - Pistacho y Caramelo","pm":6425,"ps":9990,"b":"Go Hair","c":"CAPILAR","clr":"#b0b0b0","img":"https://cdn.shopify.com/s/files/1/0921/2936/2233/files/AceiteCapilarPistachoyCaramelo.png?v=1776455927","stock":0,"unavail":true},{"sku":"501232","n":"Go Hair - Acondicionador Reparador 400ml - Cotton Candy","pm":6425,"ps":9990,"b":"Go Hair","c":"CAPILAR","clr":"#b0b0b0","img":"https://cdn.shopify.com/s/files/1/0921/2936/2233/files/AcondicionadorCottonCandy.png?v=1776725860","stock":161,"unavail":false},{"sku":"501234","n":"Go Hair - Protector termico 250 ml - Cotton Candy","pm":7344,"ps":11990,"b":"Go Hair","c":"CAPILAR","clr":"#b0b0b0","img":"https://cdn.shopify.com/s/files/1/0921/2936/2233/files/Gonail-7_1_1.jpg?v=1757600488","stock":1126,"unavail":false},{"sku":"501297","n":"Go Hair - Protector termico 250 ml - Pistacho y Caramelo","pm":7344,"ps":11990,"b":"Go Hair","c":"CAPILAR","clr":"#b0b0b0","img":"https://cdn.shopify.com/s/files/1/0921/2936/2233/files/GONAILS-3_1.jpg?v=1774547833","stock":759,"unavail":false},{"sku":"501231","n":"Go Hair - Shampoo Reparador 400ml - Cotton Candy","pm":6425,"ps":9990,"b":"Go Hair","c":"CAPILAR","clr":"#b0b0b0","img":"https://cdn.shopify.com/s/files/1/0921/2936/2233/files/ShampooCottonCandy.png?v=1776725531","stock":98,"unavail":false},{"sku":"501233","n":"Go Hair - Soft Milk Acondicionador sin enjuague 100 ml","pm":7344,"ps":11990,"b":"Go Hair","c":"CAPILAR","clr":"#b0b0b0","img":"https://cdn.shopify.com/s/files/1/0921/2936/2233/files/Soft_Milk_1.jpg?v=1763142529","stock":0,"unavail":true},{"sku":"501351","n":"Go Hair - Soft Milk Acondicionador sin enjuague 100 ml - Pistacho y Caramelo","ps":11990,"b":"Go Hair","c":"CAPILAR","clr":"#b0b0b0","img":"","stock":778,"unavail":false,"pm":7344},{"sku":"501350","n":"Go Hair - Soft Milk Acondicionador sin enjuague 100 ml - Cotton Candy","ps":11990,"b":"Go Hair","c":"CAPILAR","clr":"#b0b0b0","img":"","stock":322,"unavail":false,"pm":7344},{"sku":"501427","n":"Go Hair - Aceite Capilar Reparador 30 ml - Cotton Candy","b":"Go Hair","c":"CAPILAR","clr":"#ffb6c8","img":"https://cdn.shopify.com/s/files/1/0602/9312/0129/files/AceiteReparadorCottonCandy.png?v=1786028602&width=400","stock":785,"unavail":false,"pm":6425,"ps":9990},{"sku":"501348","n":"Go Hair - Easy Hair 3 en 1 250 ml - Cotton Candy","pm":8149,"ps":11990,"b":"Go Hair","c":"CAPILAR","img":"https://cdn.shopify.com/s/files/1/0845/5975/7624/files/EasyHair3en1.png?v=1787604286","stock":508,"unavail":false},{"sku":"501430","n":"Go Hair - Mascarilla Capilar 3 en 1 Hidratante 250ml - Cotton Candy","pm":5045,"ps":8990,"b":"Go Hair","c":"CAPILAR","img":"https://cdn.shopify.com/s/files/1/0845/5975/7624/files/Mascarilla3en1250.png?v=1787597502","stock":533,"unavail":false},{"sku":"501434","n":"Go Hair - Mascarilla Capilar 3 en 1 Hidratante 1 KG - Cotton Candy","pm":9181,"ps":16990,"b":"Go Hair","c":"CAPILAR","img":"https://cdn.shopify.com/s/files/1/0845/5975/7624/files/Mascarilla3en1Litro.png?v=1787597502","stock":108,"unavail":false}];
-const BRAND_ORDER = ['Go Hair'];
+const BRAND_ORDER = ['Nail Pro','Go Nails','Go Hair','Go Paw','Go Living','Bluesky','Artistic','Avry Beauty'];
 const BRAND_CFG = {
   'Nail Pro':    {color:'#e91e8c',bg:'#fce4f1',min:0,disc:[{at:360000,pct:5},{at:720000,pct:10}]},
   'Go Nails':    {color:'#b01060',bg:'#fce4f1',min:80000,disc:[],fixed:true},
@@ -350,7 +350,7 @@ const BRAND_CFG = {
   'Ambar':            {color:'#8b6914',bg:'#fdf5e6',min:80000,disc:[],fixed:true},
   'The Fruit Company':{color:'#8b6914',bg:'#fdf5e6',min:80000,disc:[],fixed:true},
   'Aroma Home':       {color:'#8b6914',bg:'#fdf5e6',min:80000,disc:[],fixed:true},
-};const BRAND_CATS = {"Go Hair":["CAPILAR"]};
+};const BRAND_CATS = {"Nail Pro":["ACRILICOS","EFECTOS","ESMALTE PERMANENTE 15ML","ESMALTE PERMANENTE 8ML","ESMALTES ESPECIALES","GEL CONSTRUCTOR","GEL PAINT","INSUMOS MANICURE","LAMPARA","POLYGEL","PREPARADORES","SOFT GEL","TORNO"],"Go Nails":["ACEITE CUTICULA","CREMA CORPORAL","CREMA MANOS Y PIES","DIFUSOR AROMA","EXFOLIANTE","FRAGANCIA CORPORAL","GEL DE DUCHA","HIGIENIZANTE","HOME SPRAY","INSUMOS MANICURE","JABON","LAMPARA","MANTECA CORPORAL","SKIN","SOFT GEL"],"Go Hair":["CAPILAR"],"Go Paw":["MASCOTAS"],"Bluesky":["EFECTOS","ESMALTE PERMANENTE 15ML","ESMALTES ESPECIALES","GEL CONSTRUCTOR","INSUMOS MANICURE","POLYGEL","PREPARADORES"],"Artistic":["ESMALTE PERMANENTE 15ML","ESMALTE TRADICIONAL 15ML","INSUMOS MANICURE","LAMPARA","PREPARADORES","SOFT GEL","TORNO"],"Avry Beauty":["CREMA MANOS Y PIES","HIDRATACION","JELLY SPA"],"Go Living":["DIFUSOR AROMA","HOME SPRAY"],"Ambar":["AMBIENTADOR ARMARIO","DIFUSOR AROMA","FLOR PERFUMADA","HOME SPRAY","VELA"],"The Fruit Company":["AMBIENTADOR ARMARIO","DIFUSOR AROMA","FLOR PERFUMADA","HOME SPRAY","VELA"],"Aroma Home":["AMBIENTADOR ARMARIO","DIFUSOR AROMA","VELA"]};
 
 function isGoBrand(b) { return b && (b.toUpperCase().startsWith('GO')||b==='Ambar'||b==='The Fruit Company'||b==='Aroma Home'); }
 
@@ -484,7 +484,7 @@ function init() {
       '<button class="bbtn '+(b==='all'?'active':'')+'" data-b="'+b+'" onclick="setBrand(\''+b+'\',this)">'+(b==='all'?'Todos':b)+'</button>'
     ).join('');
   renderCatsBar();
-  document.getElementById('minBanners').innerHTML = '<div style=\'background:#1a0a2e;padding:10px 18px;border-radius:12px 12px 0 0;display:flex;align-items:center;gap:8px\'><span style=\'color:#e91e8c;font-weight:800\'>! Condiciones de Compra<\/span><span style=\'color:rgba(255,255,255,.5);font-size:.75rem\'> — Lee antes de agregar productos<\/span><\/div><div style=\'border:2px solid #1a0a2e;border-top:none;border-radius:0 0 12px 12px;overflow:hidden;margin-bottom:1rem;background:#fff;padding:14px 20px\'><div style=\'font-weight:800;margin-bottom:4px\'>&#128722; Compra m\xednima: <span style=\'color:#e91e8c\'>$180.000<\/span><\/div><div style=\'color:#64748b;font-size:.82rem\'>Cualquier marca \xb7 cualquier cantidad por SKU<\/div><div style=\'color:#15803d;font-weight:700;margin-top:4px\'>&#128666; Despacho gratis a todo Chile<\/div><div style=\'margin-top:6px;display:inline-block;background:#fffbeb;border-radius:6px;padding:3px 10px;font-weight:700;color:#92400e\'>PRECIO FIJO — Sin descuentos por volumen<\/div><\/div>';
+  document.getElementById('minBanners').innerHTML = '<div style=\'background:#1a0a2e;padding:10px 18px;border-radius:12px 12px 0 0;display:flex;align-items:center;gap:8px\'><span style=\'color:#e91e8c;font-weight:800;font-size:.88rem;text-transform:uppercase;letter-spacing:.5px\'>! Condiciones de Compra</span><span style=\'color:rgba(255,255,255,.5);font-size:.73rem\'>— Lee antes de agregar productos</span></div><div style=\'display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));border:2px solid #1a0a2e;border-top:none;border-radius:0 0 12px 12px;overflow:hidden;margin-bottom:1rem\'><div style=\'padding:14px 16px;background:#fff;border-right:1px solid #e0deda\'><div style=\'font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#e91e8c;margin-bottom:6px\'>Nail Pro &amp; Avry Beauty</div><div style=\'font-size:.8rem;color:#1a0a2e;line-height:1.7\'>Min. pedido: <b>$180.000</b><br><span style=\'color:#15803d;font-weight:700\'>5% dcto</span> sobre <b>$360.000</b><br><span style=\'color:#15803d;font-weight:700\'>10% dcto</span> sobre <b>$720.000</b><br><span style=\'font-size:.7rem;color:#999\'>(Descuento aplica sobre total del pedido)</span></div></div><div style=\'padding:14px 16px;background:#fff;border-right:1px solid #e0deda\'><div style=\'font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#c8a415;margin-bottom:6px\'>Bluesky</div><div style=\'font-size:.8rem;color:#1a0a2e;line-height:1.7\'>Min. de compra: <b>$100.000</b><br><span style=\'color:#15803d;font-weight:700\'>5% dcto</span> sobre <b>$800.000</b><br><span style=\'font-size:.7rem;color:#999\'>Precio fijo bajo ese monto</span></div></div><div style=\'padding:14px 16px;background:#fff\'><div style=\'font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#b01060;margin-bottom:6px\'>MARCAS GO + HOGAR</div><div style=\'font-size:.8rem;color:#1a0a2e;line-height:1.7\'>Min. combinado (todas las Go): <b>$80.000</b><br><span style=\'color:#b01060;font-weight:800\'>PRECIO FIJO</span> — Sin descuentos<br><span style=\'font-size:.7rem;color:#999\'>Go Nails · Go Hair · Go Paw · Go Living · Ambar · The Fruit Company · Aroma Home</span></div></div><div style=\'padding:14px 16px;background:#fff\'><div style=\'font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#444;margin-bottom:6px\'>Artistic Nails</div><div style=\'font-size:.8rem;color:#1a0a2e;line-height:1.7\'><span style=\'color:#444;font-weight:800\'>PRECIO FIJO</span> — Sin descuentos<br><span style=\'color:#15803d;font-weight:700\'>Sin mínimo de compra</span><br><span style=\'font-size:.7rem;color:#999\'>Suma para el dcto de Nail Pro/Avry</span></div></div></div><div style=\'background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:8px 14px;margin-bottom:.85rem;font-size:.75rem;color:#92400e;font-weight:700;text-align:center\'>Minimo total del pedido: $180.000 — Bluesky NO suma para el descuento de Nail Pro/Avry. Todo lo demas si.</div>';
   doFilter();
 }
 
@@ -947,7 +947,8 @@ async function submitOrder(){
   let rawTotal=getRawTotalForDisc(bt);
   const items=[];
   for(const [brand,data] of Object.entries(bt))
-    for(const i of data.items){const e=ep(brand,data.raw,i.pm,rawTotal);items.push({sku:i.sku,name:i.n,brand:i.b,qty:i.qty,unitPrice:e,subtotal:e*i.qty});}
+    for(const i of data.items){const e=ep(brand,data.raw,i.pm,rawTotal);const discPct=i.pm>0?Math.round((1-e/i.pm)*100):0;items.push({sku:i.sku,name:i.n,brand:i.b,qty:i.qty,unitPrice:e,discPct,subtotal:e*i.qty});}
+  items.sort((a,b)=>{const pa=BRAND_ORDER[a.brand]||3,pb=BRAND_ORDER[b.brand]||3;return pa!==pb?pa-pb:a.name.localeCompare(b.name,'es');});
   const payload={type:'pedido',vendedor:'Luis',code,timestamp:new Date().toISOString(),tipoDoc,cliente:getClient(),notas:document.getElementById('notas').value,items,subtotal:tots.neto,iva:tots.iva,total:tots.totalConIva,descuento:tots.descuento,sendClientEmail:true};
   if(WEBHOOK_URL){try{await Promise.race([fetch(WEBHOOK_URL,{method:'POST',body:JSON.stringify(payload),headers:{'Content-Type':'application/json'},mode:'no-cors'}),new Promise(r=>setTimeout(r,8000))]);}catch(e){}}
   // Go to success screen first (before clearing okEmp)
@@ -1040,22 +1041,6 @@ brands.forEach(function(brand){
   btn.addEventListener('click',function(){setBrand(brand,this);});
   bar.appendChild(btn);
 });
-})();
-</script>
-
-<script id="_minOrderScript">
-(function(){
-var MIN=180000;
-function fmt(n){var d='$';return d+Math.round(n).toLocaleString('es-CL');}
-var s=document.createElement('div');s.id='_minSticky';
-var hd=document.querySelector('header');
-s.style.cssText='position:fixed;top:'+(hd?hd.offsetHeight:60)+'px;left:0;right:0;z-index:9999;font-family:sans-serif;font-size:.85rem;pointer-events:none;box-shadow:0 2px 6px rgba(0,0,0,.15)';
-document.body.appendChild(s);
-function upd(){var t=typeof calcTotal==='function'?calcTotal():0,f=Math.max(0,MIN-t);
-s.innerHTML=f<=0?'<div style="background:#15803d;color:#fff;padding:7px 16px;text-align:center;font-weight:700">&#x2705; Mínimo alcanzado ('+fmt(t)+') — puedes enviar tu pedido</div>':'<div style="background:#fff7ed;border-bottom:2px solid #f97316;padding:7px 16px;display:flex;justify-content:space-between;align-items:center"><span>⚠️ Faltan <b>'+fmt(f)+'</b> para el mínimo</span><span style="color:#92400e">'+fmt(t)+' / '+fmt(MIN)+'</span></div>';}
-document.addEventListener('click',function(e){var b=e.target;if(b.id!=='submitBtn')b=(b.closest&&b.closest('#submitBtn'))||null;if(!b)return;var t=typeof calcTotal==='function'?calcTotal():0;if(t<MIN){e.stopImmediatePropagation();e.preventDefault();alert('⚠️ Pedido incompleto\n\nTu carrito lleva '+fmt(t)+'.\nTe faltan '+fmt(MIN-t)+' para alcanzar el mínimo de '+fmt(MIN)+'.\n\nAgrega más productos y vuelve a intentarlo.');}},true);
-(function(){var cb=document.getElementById('catsBar');if(!cb||typeof BRAND_CATS==='undefined')return;var al=[];Object.values(BRAND_CATS).forEach(function(cs){cs.forEach(function(c){if(al.indexOf(c)<0)al.push(c);});});cb.querySelectorAll('button').forEach(function(b){var t=b.textContent.trim();if(t!=='Todas'&&al.indexOf(t)<0)b.remove();});})();
-upd();setInterval(upd,500);
 })();
 </script>
 </body></html>
