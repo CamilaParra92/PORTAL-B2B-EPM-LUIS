@@ -145,7 +145,7 @@ textarea{resize:vertical;min-height:60px}
 @media(max-width:768px){.fgrid{grid-template-columns:1fr}.clayout{grid-template-columns:1fr}.pgrid{grid-template-columns:repeat(auto-fill,minmax(148px,1fr))}}
 </style>
 </head>
-<body><div id="ofertasBanner" style="background:linear-gradient(135deg,#c62828,#e53935);color:#fff;text-align:center;padding:10px 16px;font-size:13px;font-weight:700;letter-spacing:2px;position:sticky;top:0;z-index:9999;box-shadow:0 2px 8px rgba(0,0,0,.3);">ð·ï¸ PORTAL DE OFERTAS ESPECIALES â Los precios mostrados son precios de oferta</div>
+<body><div style="background:linear-gradient(135deg,#c62828,#e53935);color:#fff;text-align:center;padding:10px 16px;font-size:13px;font-weight:700;letter-spacing:2px;position:sticky;top:0;z-index:9999;box-shadow:0 2px 8px rgba(0,0,0,.3);">&#x1F3F7;&#xFE0F; PORTAL DE OFERTAS ESPECIALES &#x1F516; Los precios mostrados son precios de oferta</div>
 <header>
   <div>
     <div class="logo-txt">EPM <span>Mayorista</span></div>
@@ -719,13 +719,13 @@ function renderCart(){
   for(const [brand,data] of Object.entries(bt)){
     rows+='<tr><td colspan="5" style="padding:.4rem .9rem;background:var(--bg);font-size:.7rem;font-weight:700;color:var(--mu);text-transform:uppercase">'+brand+'</td></tr>';
     for(const item of data.items){
-      const e=ep(brand,data.raw,item.pm,rawTotal), disc=e<item.pm;
+      const basePrice=item.pmOferta??item.pm;const e=ep(brand,data.raw,basePrice,rawTotal), disc=e<basePrice||item.pmOferta!=null;
       const imgThumb = item.img
         ? '<img src="'+item.img+'" style="width:44px;height:44px;object-fit:contain;border-radius:6px;background:#f5f4f1;flex-shrink:0;border:1px solid #e5e2de">'
           +'<div style="display:none;width:44px;height:44px;border-radius:6px;background:'+(item.clr||'#ddd')+';flex-shrink:0"></div>'
         : '<div style="width:44px;height:44px;border-radius:6px;background:'+(item.clr||'#ddd')+';flex-shrink:0;border:1px solid #e5e2de"></div>';
       rows+='<tr><td style="display:flex;align-items:center;gap:10px">'+imgThumb+'<div><div style="font-weight:600;font-size:.79rem">'+item.n+'</div><div style="font-size:.63rem;color:var(--mu)">SKU: '+item.sku+'</div></div></td>'
-        +'<td style="white-space:nowrap;font-size:.79rem">'+(disc?'<div style="text-decoration:line-through;color:var(--mu);font-size:.67rem">$'+item.pm.toLocaleString('es-CL')+'</div>':'')+'<strong>$'+e.toLocaleString('es-CL')+'</strong>'+(disc?'<div style="color:var(--ok);font-size:.63rem;font-weight:700">Con dscto</div>':'')+'</td>'
+        +'<td style="white-space:nowrap;font-size:.79rem">'+(item.pmOferta!=null?'<div style="text-decoration:line-through;color:var(--mu);font-size:.67rem">PM $'+item.pm.toLocaleString('es-CL')+'</div>':'')+'<strong>$'+e.toLocaleString('es-CL')+'</strong>'+(item.pmOferta!=null&&e<item.pmOferta?'<div style="color:#e00;font-size:.63rem;font-weight:700">Oferta + vol. dscto</div>':(item.pmOferta!=null?'<div style="color:#e00;font-size:.63rem;font-weight:700">Precio oferta</div>':'')+(disc&&item.pmOferta==null?'<div style="color:var(--ok);font-size:.63rem;font-weight:700">Con dscto</div>':''))+'</td>'
         +'<td style="text-align:center"><input class="qinp" type="number" min="0" value="'+item.qty+'" style="width:50px" onchange="setQC(\''+item.sku+'\',this.value)"/></td>'
         +'<td style="font-weight:700;font-size:.81rem;white-space:nowrap">$'+(e*item.qty).toLocaleString('es-CL')+'</td>'
         +'<td><button class="rmbtn" onclick="rmItem(\''+item.sku+'\')">â</button></td></tr>';
@@ -736,7 +736,7 @@ function renderCart(){
   let goTotal = 0;
   for(const [brand,data] of Object.entries(bt)){
     if(isGoBrand(brand)){
-      let eff=0; for(const i of data.items)eff+=ep(brand,data.raw,i.pm,rawTotal)*i.qty;
+      let eff=0; for(const i of data.items)eff+=ep(brand,data.raw,i.pmOferta??i.pm,rawTotal)*i.qty;
       goTotal += eff;
     }
   }
@@ -748,7 +748,7 @@ function renderCart(){
   let goShown = false;
   for(const [brand,data] of Object.entries(bt)){
     const cfg=BRAND_CFG[brand];
-    let eff=0; for(const i of data.items)eff+=ep(brand,data.raw,i.pm,rawTotal)*i.qty;
+    let eff=0; for(const i of data.items)eff+=ep(brand,data.raw,i.pmOferta??i.pm,rawTotal)*i.qty;
 
     if(isGoBrand(brand)){
       if(!goShown){
@@ -801,7 +801,7 @@ function renderCart(){
   }
   document.getElementById('sumRows').innerHTML=Object.values(cart).slice(0,5).map(function(item){
     var p=item.product, qty=item.qty;
-    var e=ep(p.b,bt[p.b]?.raw||0,p.pm,rawTotal);
+    var e=ep(p.b,bt[p.b]?.raw||0,p.pmOferta??p.pm,rawTotal);
     return '<div class="srow"><span>'+p.n.substring(0,28)+'â¦ x'+qty+'</span><span>$'+(e*qty).toLocaleString('es-CL')+'</span></div>';
   }).join('')+(Object.keys(cart).length>5?'<div class="srow" style="font-style:italic">... y '+(Object.keys(cart).length-5)+' mÃ¡s</div>':'');
   const errs=[];
@@ -814,7 +814,7 @@ function renderCart(){
   for(const [brand,data] of Object.entries(bt)){
     if(isGoBrand(brand)) continue;
     const cfg=BRAND_CFG[brand];
-    let eff=0; for(const i of data.items)eff+=ep(brand,data.raw,i.pm,rawTotal)*i.qty;
+    let eff=0; for(const i of data.items)eff+=ep(brand,data.raw,i.pmOferta??i.pm,rawTotal)*i.qty;
     if(cfg?.min&&eff<cfg.min)errs.push('<div class="alert warn">â  <b>'+brand+'</b>: mÃ­n $'+cfg.min.toLocaleString('es-CL')+' â faltan $'+(cfg.min-eff).toLocaleString('es-CL')+'</div>');
   }
   document.getElementById('alerts').innerHTML=errs.join('');
@@ -949,7 +949,7 @@ async function submitOrder(){
   let rawTotal=getRawTotalForDisc(bt);
   const items=[];
   for(const [brand,data] of Object.entries(bt))
-    for(const i of data.items){const e=ep(brand,data.raw,i.pm,rawTotal);const discPct=i.pm>0?Math.round((1-e/i.pm)*100):0;items.push({sku:i.sku,name:i.n,brand:i.b,qty:i.qty,unitPrice:e,discPct,subtotal:e*i.qty});}
+    for(const i of data.items){const e=ep(brand,data.raw,i.pmOferta??i.pm,rawTotal);const discPct=i.pm>0?Math.round((1-e/i.pm)*100):0;items.push({sku:i.sku,name:i.n,brand:i.b,qty:i.qty,unitPrice:e,discPct,subtotal:e*i.qty});}
   items.sort((a,b)=>{const pa=BRAND_ORDER[a.brand]||3,pb=BRAND_ORDER[b.brand]||3;return pa!==pb?pa-pb:a.name.localeCompare(b.name,'es');});
   const payload={type:'pedido',vendedor:'Luis',code,timestamp:new Date().toISOString(),tipoDoc,cliente:getClient(),notas:document.getElementById('notas').value,items,subtotal:tots.neto,iva:tots.iva,total:tots.totalConIva,descuento:tots.descuento,sendClientEmail:true};
   if(WEBHOOK_URL){try{await Promise.race([fetch(WEBHOOK_URL,{method:'POST',body:JSON.stringify(payload),headers:{'Content-Type':'application/json'},mode:'no-cors'}),new Promise(r=>setTimeout(r,8000))]);}catch(e){}}
