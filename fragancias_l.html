@@ -538,11 +538,8 @@ function doFilter() {
     const matchQ = !q || (p.n||'').toLowerCase().includes(q) || (p.sku||'').toLowerCase().includes(q);
     if (!q) {
         if (p.unavail) return false;
-        if (p.b==='Nail Pro' && p.stock<=12) return false;
-        else if (p.b==='Avry Beauty' && p.stock<=5) return false;
-        else if (p.b==='Artistic' && p.stock<=6) return false;
-        else if ((p.b==='Ambar'||p.b==='The Fruit Company'||p.b==='Aroma Home') && p.stock<=10) return false;
-        else if (!(p.b==='Nail Pro'||p.b==='Avry Beauty'||p.b==='Artistic'||p.b==='Ambar'||p.b==='The Fruit Company'||p.b==='Aroma Home') && p.stock<=20) return false;
+        if (['Bluesky','Go Nails','Go Hair','Go Paw','Go Living'].includes(p.b) && p.stock<12) return false;
+        else if (p.stock<6) return false;
       }
     return matchBrand && matchCat && matchQ;
   }).sort((a,b)=>{const na=(a.n||'').toUpperCase(),nb=(b.n||'').toUpperCase();return na<nb?-1:na>nb?1:0;});
